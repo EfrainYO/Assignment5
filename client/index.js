@@ -80,10 +80,10 @@ async function handleEditForm(event) {
 
     const book = {
       id: currentBook.id,
-      title: document.getElementById('title').value,
-      author: document.getElementById('author').value,
-      year: document.getElementById('year').value,
-      quantity: document.getElementById('quantity').value,
+      title: document.getElementById('title').value.trim(),
+      author: document.getElementById('author').value.trim(),
+      year: document.getElementById('year').value.trim(),
+      quantity: document.getElementById('quantity').value.trim(),
     };
     await editBook(book);
 
@@ -102,10 +102,10 @@ async function handleAddForm(event) {
     event.preventDefault();
 
     const book = {
-      title: document.getElementById('title').value,
-      author: document.getElementById('author').value,
-      year: document.getElementById('year').value,
-      quantity: document.getElementById('quantity').value,
+      title: document.getElementById('title').value.trim(),
+      author: document.getElementById('author').value.trim(),
+      year: document.getElementById('year').value.trim(),
+      quantity: document.getElementById('quantity').value.trim(),
     };
     await addBook(book);
 
@@ -138,11 +138,11 @@ function generateRows(books) {
     books.forEach((buku) => {
       rows += `<tr class="book-item">
         <td class="px-6 py-4 border-b">${buku.title}</td>
-        <td class="px-6 py-4 border-b">${buku.author} </td>
-        <td class="px-6 py-4 border-b">${buku.year} </td>
+        <td class="px-6 py-4 border-b">${buku.author}</td>
+        <td class="px-6 py-4 border-b">${buku.year}</td>
         <td class="px-6 py-4 border-b">${buku.quantity}</td>
         <td class="px-6 py-4 border-b text-center">
-          <button class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="handleClickEditButton(${buku.id}))">Edit</button>
+          <button class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="handleClickEditButton(${buku.id})">Edit</button>
           <button class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="handleClickDeleteButton(${buku.id})">Hapus</button>  
         </td>
       </tr>`;
@@ -200,8 +200,8 @@ async function loadPage() {
 
 async function fetchBooks() {
   try {
-    const buku = await fetch(localHost);
-    const data = await buku.json();
+    const addBuku = await fetch(localHost);
+    const data = await addBuku.json();
     books = data;
   } catch (error) {
     console.log(error);
@@ -229,16 +229,13 @@ async function addBook(book) {
 
 async function editBook(book) {
   try {
-    const editBuku = await fetch(`${localHost}/${book.id}`, {
+    await fetch(`${localHost}/${book.id}`, {
       method: 'PUT',
       body: JSON.stringify(book),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    if (editBuku) {
-      console.log(editBuku);
-    }
   } catch (error) {
     console.log(error);
     console.log('Terjadi kesalahan saat mengubah buku');
